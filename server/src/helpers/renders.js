@@ -1,15 +1,18 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { StaticRouter } from "react-router-dom";
+import { renderRoutes } from "react-router-config";
+import { Provider } from "react-redux";
 import Routes from "../client/Routes";
 
-export default req => {
-  const content = renderToString(
+export default (req, store) => {
+  <Provider store={store}>
     <StaticRouter location={req.path} context={{}}>
-      <Routes />
+      <div>{renderRoutes(Routes)}</div>
     </StaticRouter>
-  );
-  return (
+  </Provider>;
+
+  return `
     <html>
       <head />
       <body>
@@ -17,5 +20,5 @@ export default req => {
         <script src="bundle.js" />
       </body>
     </html>
-  );
+  `;
 };
